@@ -1,17 +1,25 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app.models import DecisionUpdate
+from app.auth import authenticate
 
-DATABASE_URL = "sqlite:///./decisionguard.db"
+router = APIRouter()
 
-engine = create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
-)
+@router.get("/dashboard/summary")
+def dashboard_summary(
+    db: Session = Depends(get_db),
+    _=Depends(authenticate)
+):
+    updates = db.query(DecisionUpdate).all()
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    critical = sum(1 for u in updates if u.risk == "CRITICAL")
+    medium = sum(1 for u in updates if u.risk == "MEDIUM")
+    low = sum(1 for u in updates if u.risk == "LOW")
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    return {
+        "total_updates": len(updates),
+        "critical": critical,
+        "medium": medium,
+        "low": low
+    }
