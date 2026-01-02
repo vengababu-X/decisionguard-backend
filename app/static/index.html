@@ -1,26 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>DecisionGuard Dashboard</title>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: #0b1220;
       color: #e5e7eb;
-      padding: 20px;
     }
 
-    h1 {
+    header {
+      padding: 16px 24px;
+      background: #020617;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    header h1 {
+      margin: 0;
       color: #38bdf8;
+      font-size: 20px;
+    }
+
+    main {
+      padding: 24px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: #020617;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .card p {
+      font-size: 28px;
+      margin: 8px 0 0;
+    }
+
+    .critical { color: #ef4444; }
+    .medium { color: #f59e0b; }
+    .low { color: #22c55e; }
+
+    .search {
+      margin-bottom: 24px;
+      display: flex;
+      gap: 8px;
     }
 
     input, button {
-      padding: 8px;
-      margin-right: 6px;
-      border-radius: 4px;
+      padding: 10px;
+      border-radius: 6px;
       border: none;
+      font-size: 14px;
+    }
+
+    input {
+      flex: 1;
     }
 
     button {
@@ -28,17 +81,22 @@
       cursor: pointer;
     }
 
-    .card {
-      background: #020617;
-      padding: 15px;
-      margin-top: 15px;
-      border-radius: 8px;
-      border-left: 6px solid #38bdf8;
+    .history {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .LOW { border-color: #22c55e; }
-    .MEDIUM { border-color: #f59e0b; }
-    .CRITICAL { border-color: #ef4444; }
+    .event {
+      background: #020617;
+      border-left: 6px solid #334155;
+      padding: 12px;
+      border-radius: 6px;
+    }
+
+    .event.LOW { border-color: #22c55e; }
+    .event.MEDIUM { border-color: #f59e0b; }
+    .event.CRITICAL { border-color: #ef4444; }
 
     small {
       color: #94a3b8;
@@ -48,15 +106,36 @@
 
 <body>
 
-  <h1>DecisionGuard – Internal Dashboard</h1>
+<header>
+  <h1>DecisionGuard · Internal Decision Risk Dashboard</h1>
+</header>
 
-  <div>
-    <input id="decisionId" placeholder="Decision ID (e.g. test_1)" />
-    <button onclick="loadHistory()">Load History</button>
+<main>
+
+  <div class="cards">
+    <div class="card">
+      <h2>Critical Decisions</h2>
+      <p class="critical" id="critical">–</p>
+    </div>
+    <div class="card">
+      <h2>Medium Risk</h2>
+      <p class="medium" id="medium">–</p>
+    </div>
+    <div class="card">
+      <h2>Low Risk</h2>
+      <p class="low" id="low">–</p>
+    </div>
   </div>
 
-  <div id="results"></div>
+  <div class="search">
+    <input id="decisionId" placeholder="Enter Decision ID (e.g. test_1)">
+    <button onclick="loadHistory()">View History</button>
+  </div>
 
-  <script src="app.js"></script>
+  <div class="history" id="history"></div>
+
+</main>
+
+<script src="app.js"></script>
 </body>
 </html>
