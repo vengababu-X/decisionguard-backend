@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>DecisionGuard Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #38bdf8;
+    }
+
+    input, button {
+      padding: 8px;
+      margin-right: 6px;
+      border-radius: 4px;
+      border: none;
+    }
+
+    button {
+      background: #38bdf8;
+      cursor: pointer;
+    }
+
+    .card {
+      background: #020617;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 8px;
+      border-left: 6px solid #38bdf8;
+    }
+
+    .LOW { border-color: #22c55e; }
+    .MEDIUM { border-color: #f59e0b; }
+    .CRITICAL { border-color: #ef4444; }
+
+    small {
+      color: #94a3b8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>DecisionGuard – Internal Dashboard</h1>
+
+  <div>
+    <input id="decisionId" placeholder="Decision ID (e.g. test_1)" />
+    <button onclick="loadHistory()">Load History</button>
+  </div>
+
+  <div id="results"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
