@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+
 from app.database import engine
 from app.models import Base
 from app.routes import router as decision_router
@@ -10,3 +12,6 @@ app = FastAPI(title="DecisionGuard")
 
 app.include_router(decision_router)
 app.include_router(dashboard_router)
+
+# Serve UI
+app.mount("/", StaticFiles(directory="app/static", html=True), name="static")
