@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from .database import Base, engine
-from .routes import router
+from app.database import engine
+from app.models import Base
+from app.routes import router as decision_router
+from app.dashboard import router as dashboard_router
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="DecisionGuard v3")
-app.include_router(router)
+app = FastAPI(title="DecisionGuard")
 
-@app.get("/health")
-def health():
-    return {"status": "ok"}
+app.include_router(decision_router)
+app.include_router(dashboard_router)
