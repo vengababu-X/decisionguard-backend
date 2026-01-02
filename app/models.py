@@ -8,7 +8,7 @@ Base = declarative_base()
 class Decision(Base):
     __tablename__ = "decisions"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
     decision_id = Column(String, unique=True, index=True)
     company_id = Column(String)
 
@@ -19,7 +19,7 @@ class Decision(Base):
 class DecisionUpdate(Base):
     __tablename__ = "decision_updates"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
     decision_id = Column(String, index=True)
 
     chosen_cost = Column(Float)
