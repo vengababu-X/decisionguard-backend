@@ -2,19 +2,17 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
-from app.database import engine
-from app.models import Base
-from app.routes import router as decision_router
-from app.dashboard import router as dashboard_router
+from app.routes import router
 
-Base.metadata.create_all(bind=engine)
+app = FastAPI(
+    title="DecisionGuard v3",
+    version="0.1.0"
+)
 
-app = FastAPI(title="DecisionGuard")
+# API routes
+app.include_router(router)
 
-app.include_router(decision_router)
-app.include_router(dashboard_router)
-
-# Serve UI at /ui
+# Serve UI
 app.mount("/ui", StaticFiles(directory="app/static", html=True), name="ui")
 
 # Redirect root to UI
