@@ -1,47 +1,46 @@
 const API_KEY = prompt("Enter Company API Key");
 
+async function loadDashboard() {
+  const res = await fetch("/dashboard/summary", {
+    headers: { "x-api-key": API_KEY }
+  });
+
+  if (!res.ok) return;
+
+  const data = await res.json();
+  document.getElementById("critical").innerText = data.critical;
+  document.getElementById("medium").innerText = data.medium;
+  document.getElementById("low").innerText = data.low;
+}
+
 async function loadHistory() {
   const decisionId = document.getElementById("decisionId").value;
-  const container = document.getElementById("results");
-
+  const container = document.getElementById("history");
   container.innerHTML = "";
 
-  if (!decisionId) {
-    container.innerHTML = "<p>Please enter a decision ID</p>";
-    return;
-  }
-
-  const response = await fetch(`/decision/${decisionId}/history`, {
-    headers: {
-      "x-api-key": API_KEY
-    }
+  const res = await fetch(`/decision/${decisionId}/history`, {
+    headers: { "x-api-key": API_KEY }
   });
 
-  if (!response.ok) {
-    container.innerHTML = "<p>Error fetching decision history</p>";
+  if (!res.ok) {
+    container.innerHTML = "<p>Decision not found</p>";
     return;
   }
 
-  const history = await response.json();
+  const history = await res.json();
 
-  if (history.length === 0) {
-    container.innerHTML = "<p>No history found</p>";
-    return;
-  }
+  history.forEach(h => {
+    const div = document.createElement("div");
+    div.className = `event ${h.risk}`;
 
-  history.forEach(item => {
-    const card = document.createElement("div");
-    card.className = `card ${item.risk}`;
-
-    card.innerHTML = `
-      <strong>Risk:</strong> ${item.risk}<br/>
-      <strong>Regret:</strong> ${item.regret}<br/>
-      <strong>Chosen Cost:</strong> ${item.chosen_cost}<br/>
-      <strong>Alternatives:</strong> ${item.alternatives}<br/>
-      <small>${item.created_at}</small>
-      <p>${item.explanation}</p>
+    div.innerHTML = `
+      <strong>${h.risk}</strong> · Regret ${h.regret}<br>
+      <small>${h.created_at}</small>
+      <p>${h.explanation}</p>
     `;
 
-    container.appendChild(card);
+    container.appendChild(div);
   });
 }
+
+loadDashboard();
